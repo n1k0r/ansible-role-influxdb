@@ -1,0 +1,2 @@
+influxdb_service_dir: influxdb
+influxdb_path: "{{ services_path }}/{{ influxdb_service_dir }}"

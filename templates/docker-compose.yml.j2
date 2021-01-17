@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  influxdb_v2:
+    image: quay.io/influxdb/influxdb:v2.0.3
+    command: --reporting-disabled
+    restart: always
+    ports:
+      - "{{ influxdb.host }}:{{ influxdb.port }}:8086"
+    volumes:
+      - ./influxdbv2/:/root/.influxdbv2/

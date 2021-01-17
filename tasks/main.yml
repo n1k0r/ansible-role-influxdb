@@ -1,0 +1,40 @@
+- name: Create directory
+  file:
+    path: "{{ influxdb_path }}"
+    state: directory
+    owner: "{{ account.user }}"
+    group: "{{ account.user }}"
+  become: yes
+
+- name: Template configuration
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ influxdb_path }}/docker-compose.yml"
+
+- name: Start InfluxDB
+  community.general.docker_compose:
+    project_src: "{{ influxdb_path }}"
+    state: present
+  register: output
+  become: yes
+
+- name: Check if configurated
+  stat:
+    path: "{{ influxdb_path }}/influxdbv2/configs"
+  register: influxdb_configs_result
+
+- when: not influxdb_configs_result.stat.exists
+  block:
+  - name: Wait for server
+    wait_for:
+      port: "{{ influxdb.port }}"
+      delay: 10
+      connect_timeout: 5
+      sleep: 5
+      timeout: 40
+
+  - name: Setup InfluxDB
+    command:
+      cmd: "docker-compose exec influxdb_v2 influx setup -u {{ influxdb.username }} -p {{ influxdb.password }} -o {{ influxdb.org }} -b {{ influxdb.bucket }} -t {{ influxdb.token }} -r 0 --force"
+      chdir: "{{ influxdb_path }}"
+    become: yes
