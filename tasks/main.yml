@@ -2,9 +2,6 @@
   file:
     path: "{{ influxdb_path }}"
     state: directory
-    owner: "{{ account.user }}"
-    group: "{{ account.user }}"
-  become: yes
 
 - name: Template InfluxDB configuration
   template:
@@ -22,4 +19,3 @@
     project_src: "{{ influxdb_path }}"
     state: present
   register: output
-  become: yes

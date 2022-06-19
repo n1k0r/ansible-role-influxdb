@@ -13,5 +13,3 @@ influxdb:
   org: default
   bucket: data
 ```
-
-Account dictionary is also expected: https://gitlab.com/n1k0r-ansible/roles/master
