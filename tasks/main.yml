@@ -15,7 +15,7 @@
     dest: "{{ influxdb_path }}/docker-compose.yml"
 
 - name: Start InfluxDB
-  community.general.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ influxdb_path }}"
     state: present
   register: output
